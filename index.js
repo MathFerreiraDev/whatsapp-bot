@@ -61,22 +61,10 @@ venom
   /*setTimeout(() => {
     dataMap.forEach(item => console.log(item));
   }, 2000);*/
-async function get_apiresults(){
-  
-  
-  let dataMap = await LendingRoutine.get_lendings();
-  
-  console.log(dataMap);
-  
 
+  
+  lending_routine.message_sender(client);
 
-  setTimeout(() => {
-    dataMap.forEach(item => console.log(item));
-  }, 2000);
-}
-  
-  
-get_apiresults();
   
 
 function start(client) {
@@ -89,7 +77,7 @@ function start(client) {
   const lending_routine = new LendingRoutine();
   
   
-  for (let i = 0; i < 20; i++) {
+  /*for (let i = 0; i < 20; i++) {
     client.sendText('557599772720@c.us', `Mensagem de spam!!!`)
       .then((result) => {
         console.log('Mensagem enviada com sucesso: ', result);
@@ -97,15 +85,15 @@ function start(client) {
       .catch((erro) => {
         console.error('Erro ao enviar a mensagem: ', erro);
       });
-  }
-      cron.schedule('0 18 * * 1-5', () => {     //[0]-minutos; [18]-horas da tarde; [*]-durante todo o mês; [*]-todos os meses; [1-5]-segunda a sexta*
+  }*/
+     /* cron.schedule('0 18 * * 1-5', () => {     //[0]-minutos; [18]-horas da tarde; [*]-durante todo o mês; [*]-todos os meses; [1-5]-segunda a sexta*
         console.log('-- HORARIO DE VERFICAÇÃO --');
         lending_routine.message_sender(client);
     }, {
         timezone: "America/Sao_Paulo" // Ajuste o fuso horário conforme necessário!
-    });
+    });*/
   
-
+    lending_routine.message_sender(client);
 
   
   user_commands.reply_options(client);
