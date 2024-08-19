@@ -1,4 +1,5 @@
 const actionCommands = require('../commands/actions');
+const messagesTypes = require('../commands/messages');
 const apiSource = require("./api_conform");
 
 
@@ -53,13 +54,13 @@ class LendingRoutine {
       
 
       if (true){//await actionCommands.checkIsTodayDataAPI(lending, 2)){ //2 dias
-        message_body = actionCommands.messageBodyGenerator(2, lending, studentData, lending_final_date);
+        message_body = messagesTypes.messageBodyGenerator(2, lending, studentData, lending_final_date, lending_initial_date);
 
       } else if (await actionCommands.checkIsTodayDataAPI(lending, 1)) {
-        message_body = actionCommands.messageBodyGenerator(1, lending, studentData, lending_final_date);
+        message_body = messagesTypes.messageBodyGenerator(1, lending, studentData, lending_final_date, lending_initial_date);
 
       } else if (await actionCommands.checkIsTodayDataAPI(lending, 0)) {
-        message_body = actionCommands.messageBodyGenerator(0, lending, studentData, lending_final_date);
+        message_body = messagesTypes.messageBodyGenerator(0, lending, studentData, lending_final_date, lending_initial_date);
 
       }
 
@@ -73,11 +74,8 @@ class LendingRoutine {
 
         setTimeout(() => {
           for (const [key, coordinator] of coordinatorsData) {
-            const alert_body = "*-- NOVA CAHAMDA DE ATRASO DE LIVRO! 🚨🚨🚨*\n"+
-            `Foi registrado que ${studentData.nome}, aluno(a) do curso ${coordinator.curso} de ${coordinator.ano}, do RM: ${studentData.rm} `+
-            `não realizou a devolução do livro ${lending.livro_titulo} dentro do prazo até o dia ${lending_final_date} `+
-            `no qual obteve de ${lending.prazo} dias para devolução 👀​\n\n`+
-            "*📚​ É necessária a consulta para com o mesmo e realizar a devolução do livro.*";
+
+            const alert_body = messagesTypes.coordinatorBodyMessage(lending, studentData, coordinator, lending_final_date, lending_initial_date);
            
             actionCommands.sendMessage(client, coordinator.telefone, alert_body, "coordenador");
           }

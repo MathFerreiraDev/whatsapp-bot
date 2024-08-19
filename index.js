@@ -1,5 +1,5 @@
 const venom = require('venom-bot');
-const UserCommands = require('./commands/user_commands');
+const UserCommands = require('./events/user_commands');
 const LendingRoutine = require('./events/routine');
 
 //const { parse, addDays, isAfter, isToday, format } = require('date-fns');
