@@ -8,10 +8,10 @@ const cron = require('node-cron');
 
 venom
   .create({
+    session: 'bot-whatsapp',
     multidevice: true,
     folderNameToken: 'tokens',
     headless: true,
-    session: 'tcc-whatsapp',
     logQR: true,
     debug: true,
     disableWelcome: true,
@@ -63,8 +63,10 @@ venom
   }, 2000);*/
 
   
-  lending_routine.message_sender(client);
+  //lending_routine.message_sender(client);
 
+  
+  
   
 
 function start(client) {
@@ -75,6 +77,10 @@ function start(client) {
   
   const user_commands = new UserCommands();
   const lending_routine = new LendingRoutine();
+
+
+
+  lending_routine.message_sender(client);
   
   
   /*for (let i = 0; i < 20; i++) {
@@ -86,14 +92,14 @@ function start(client) {
         console.error('Erro ao enviar a mensagem: ', erro);
       });
   }*/
-     /* cron.schedule('0 18 * * 1-5', () => {     //[0]-minutos; [18]-horas da tarde; [*]-durante todo o mês; [*]-todos os meses; [1-5]-segunda a sexta*
+      cron.schedule('0 18 * * 1-5', () => {     //[0]-minutos; [18]-horas da tarde; [*]-durante todo o mês; [*]-todos os meses; [1-5]-segunda a sexta*
         console.log('-- HORARIO DE VERFICAÇÃO --');
-        lending_routine.message_sender(client);
+        //lending_routine.message_sender(client);
     }, {
         timezone: "America/Sao_Paulo" // Ajuste o fuso horário conforme necessário!
-    });*/
+    });
   
-    lending_routine.message_sender(client);
+    
 
   
   user_commands.reply_options(client);

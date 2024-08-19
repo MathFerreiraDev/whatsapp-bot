@@ -1,37 +1,81 @@
+const actionCommands = require('../commands/actions');
+const date = require('date-fns');
+const constUrl = "https://marciossupiais.shop/tcc";
 
     
 
-     function checkIsTodayDataAPI(element, past_days){
-        if(require('date-fns').isToday(require('date-fns').addDays(require('date-fns').parse(element.data_aluguel, 'yyyy-MM-dd', new Date()), Number(element.prazo)-past_days))){
-          return true;
-        }else{
-          return false;
-        }
-      }
+     
        
         
      async function get_lendings() {
         var data_map = new Map();
         
         try {
-            const response = await fetch("https://marciossupiais.shop/tcc/emprestimos/").then(res => res.json())
+            const response = await fetch(constUrl+"/emprestimos/listar/").then(res => res.json())
             
             response.DATA
-                .filter(item => checkIsTodayDataAPI(item,3) || checkIsTodayDataAPI(item,2) || checkIsTodayDataAPI(item,1) || checkIsTodayDataAPI(item,0)) // Filtrando os itens
+                //.filter(item => actionCommands.checkIsTodayDataAPI(item,2) || actionCommands.checkIsTodayDataAPI(item,1) || actionCommands.checkIsTodayDataAPI(item,0) || actionCommands.checkIsTodayDataAPI(item,-1)) // Filtrando os itens
                 .forEach(item => {
-                    data_map.set(item.rm, item); // Armazenando no Map
+                    data_map.set(item.id, item); 
                 });
     
   
             return data_map;
             
         } catch (error) {
-            console.error('Erro ao buscar dados:', error);
+            console.error('Erro ao buscar pelos empréstimos listados: ', error);
             return [];
         }
     }
 
+    async function get_student(rm_number) {
+      let data_map = new Map();
+      
+      try {
+        
+          const response = await fetch(constUrl+"/alunos/rm/"+rm_number).then(res => res.json())
+          
+          response.DATA
+              .forEach(item => {
+                  data_map.set(item.rm, item); 
+              });
+  
+
+          return data_map;
+          
+      } catch (error) {
+          console.error('Erro ao buscar pelos alunos listados: ', error);
+          return [];
+      }
+  }
+
+
+  // EM TESTE -------------------------------------------------------------------------------
+  async function get_coordinators(course_id) {
+    var data_map = new Map();
+    
+    try {
+        const response = await fetch(constUrl+`/coordenadores/`).then(res => res.json())
+        
+        response.DATA
+            .filter(item => item.id_curso == course_id) // Filtrando os id's de curso
+            .forEach(item => {
+                data_map.set(item.id, item); 
+            });
+
+
+        return data_map;
+        
+    } catch (error) {
+        console.error('Erro ao buscar pelos cursos listados: ', error);
+        return [];
+    }
+}
+
+  
+
     module.exports = {
-        checkIsTodayDataAPI,
-        get_lendings
+        get_lendings,
+        get_student,
+        get_coordinators
       };
