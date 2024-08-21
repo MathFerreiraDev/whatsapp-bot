@@ -11,7 +11,7 @@ const constUrl = "https://marciossupiais.shop/tcc";
         var data_map = new Map();
         
         try {
-            const response = await fetch(constUrl+"/emprestimos/listar/").then(res => res.json())
+            const response = await fetch(constUrl+"/emprestimos/pendentes").then(res => res.json())
             
             response.DATA
                 //.filter(item => actionCommands.checkIsTodayDataAPI(item,2) || actionCommands.checkIsTodayDataAPI(item,1) || actionCommands.checkIsTodayDataAPI(item,0) || actionCommands.checkIsTodayDataAPI(item,-1)) // Filtrando os itens

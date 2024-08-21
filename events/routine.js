@@ -38,6 +38,7 @@ class LendingRoutine {
     //REALIZANDO SOB CADA EMPRESTIMO ADQUIRIDO
 
     for (const [key, lending] of dataMap_lendings) {
+     
       console.log(lending.aluno_rm); // Imprime o campo idade de cada item
 
       console.log("CHAMANDO POR RM-----------------------");
@@ -64,12 +65,18 @@ class LendingRoutine {
 
       }
 
+
       actionCommands.sendMessage(client, student_phone, message_body, "aluno");
 
       //Adicionar veriricação para mensagem de renovação
-
-
-      if (lending.renovavel == 1) {
+      if(parseInt(lending.renovavel) == 1){
+        
+        message_body = "Parece que a renovação automática para este livro ainda está habilitada, digite /renovar caso deseje renovar o aluguel de seu livro por mais *7 dias* ";
+        actionCommands.sendMessage(client, student_phone, message_body, "aluno");
+        
+      }
+     
+      if (parseInt(lending.renovavel) == 1) { //&& dia atrasado
         let coordinatorsData = await apiSource.get_coordinators(studentData.id_curso);
 
         setTimeout(() => {
@@ -79,7 +86,7 @@ class LendingRoutine {
            
             actionCommands.sendMessage(client, coordinator.telefone, alert_body, "coordenador");
           }
-        }, 2000);
+        }, 4000);
       }
 
 
