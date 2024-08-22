@@ -7,8 +7,8 @@ class UserCommands {
 
         
         client.onMessage((message) => {
-
-            if (message.body.toLowerCase() === 'renovar' && !message.isGroupMsg && !this.check_renewal) {
+            //FAZER CHECAGEM SE QUEM ENVIOU A MENSAGEM É UM ALUNO
+            if (message.body.toLowerCase() === '/renovar' && !message.isGroupMsg && !this.check_renewal) {
               client.sendText(message.from, 'Opa, então você deseja renovar? te daremos 7 dias a mais, aproveite!')
                 .then((result) => {
                   console.log('Mensagem enviada com sucesso: ', result);

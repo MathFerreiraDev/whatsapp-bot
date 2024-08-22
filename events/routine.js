@@ -71,9 +71,8 @@ class LendingRoutine {
       //Adicionar veriricação para mensagem de renovação
       if(parseInt(lending.renovavel) == 1){
         
-        message_body = "Parece que a renovação automática para este livro ainda está habilitada, digite /renovar caso deseje renovar o aluguel de seu livro por mais *7 dias* ";
+        message_body = "Parece que a renovação automática para este livro ainda está habilitada, digite */renovar* caso deseje renovar o aluguel de seu livro por mais *7 dias* ";
         actionCommands.sendMessage(client, student_phone, message_body, "aluno");
-        
       }
      
       if (parseInt(lending.renovavel) == 1) { //&& dia atrasado
@@ -88,6 +87,8 @@ class LendingRoutine {
           }
         }, 4000);
       }
+
+      
 
 
 
