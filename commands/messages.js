@@ -17,7 +17,7 @@ function coordinatorBodyMessage(item_lending, item_student, item_coordinator, fi
 
 
 function messageBodyGenerator(stituation, item_lending, item_student, item_f_date, item_i_date){
-    const randomBody = ~~(Math.random() * 4) + 1;
+    /*const randomBody = ~~(Math.random() * 4) + 1;
   
     switch(stituation){
       case 2:
@@ -133,7 +133,14 @@ function messageBodyGenerator(stituation, item_lending, item_student, item_f_dat
   
       break;
   
-    }
+    }*/
+
+      
+
+     
+
+      return `Teste de envio de mensagem*`;
+
   }
 
   module.exports = {

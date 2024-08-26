@@ -79,8 +79,9 @@ function start(client) {
   const lending_routine = new LendingRoutine();
 
 
-
+  
   lending_routine.message_sender(client);
+  user_commands.reply_options(client);
   
   
   /*for (let i = 0; i < 20; i++) {
@@ -104,5 +105,4 @@ function start(client) {
   
   user_commands.reply_options(client);
 
-  
 }

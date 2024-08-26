@@ -13,9 +13,13 @@ function addDaysToDate(past_date, add_days){
    return date.format(date.addDays(new Date(past_date), Number(add_days)), 'dd/MM/yyyy');
 }
 
-function sendMessage(client_user, number, message_body, to_person) {
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-  client_user.sendText(`55${number}@c.us`, message_body)
+async function  sendMessage(client_user, number, message_body, to_person) {
+
+  await client_user.sendText(`55${number}@c.us`, message_body)
     .then((result) => {
       console.log(`Mensagem enviada com sucesso para o ${to_person}`, result);
     })
@@ -23,6 +27,8 @@ function sendMessage(client_user, number, message_body, to_person) {
       console.error(`Erro ao enviar a mensagem para o ${to_person}`, erro);
     });
 
+
+   
 }
 
 
@@ -30,5 +36,6 @@ function sendMessage(client_user, number, message_body, to_person) {
 module.exports = {
   checkIsTodayDataAPI,
   addDaysToDate,
+  delay,
   sendMessage
 };
