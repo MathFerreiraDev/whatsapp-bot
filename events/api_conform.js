@@ -28,16 +28,17 @@ const constUrl = "https://marciossupiais.shop/tcc";
         }
     }
 
-    async function get_student(rm_number) {
+    async function get_especific_lending(id_lending) {
       let data_map = new Map();
       
       try {
         
-          const response = await fetch(constUrl+"/alunos/rm/"+rm_number).then(res => res.json())
+          const response = await fetch(constUrl+"/listar/pendentes").then(res => res.json())
           
           response.DATA
+          .filter(item => item.id == id_lending)
               .forEach(item => {
-                  data_map.set(item.rm, item); 
+                  data_map.set(item.id, item); 
               });
   
 
@@ -76,6 +77,6 @@ const constUrl = "https://marciossupiais.shop/tcc";
 
     module.exports = {
         get_lendings,
-        get_student,
+        get_especific_lending,
         get_coordinators
       };
