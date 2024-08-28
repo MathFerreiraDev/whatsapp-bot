@@ -1,4 +1,5 @@
 const actionCommands = require('../commands/actions');
+const apiSource = require("./api_conform");
 const userStates = {};
 
 class UserCommands {
@@ -17,7 +18,7 @@ class UserCommands {
             
             //VERIFICA SE O NÚMERO POSSUI ALGUM STEP // COLOCAR UM IF SE CASO OCORRER /SETAR, O ESTADO VIRA ZERO ou delete userStates[userId];
             if (!userStates[phone_number]) {
-                userStates[phone_number] = { step: 0 };
+                userStates[phone_number] = { step: 0, request_code: 0 };
               }
             
             //if (message.body.toLowerCase() === '/renovar' && !message.isGroupMsg) {
@@ -26,8 +27,14 @@ class UserCommands {
                   // COMANDO DE "/RENOVAR"
                     case 0:
                       if(message.body.toLowerCase() === '/renovar'){
-                        actionCommands.sendMessage(client, phone_number, "Então deseja renovar? Digite o código do empréstimo que foi regerado", "solicitador");
+                        map_result = apiSource.get_especific_lending(phone_number);
+                        if(map_result != []){
+                        actionCommands.sendMessage(client, phone_number, "Digite o código de solicitação existente para o livro que deseja renovar", "solicitador");
                         userStates[phone_number].step++;
+                        //userStates[phone_number].request_code = ;
+                        }else {
+                          actionCommands.sendMessage(client, phone_number, "Seu número não possui nenhum empéstimo registrado", "solicitador");
+                        }
                       }
                       break;
                     case 1:

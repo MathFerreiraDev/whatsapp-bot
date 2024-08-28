@@ -28,15 +28,15 @@ const constUrl = "https://marciossupiais.shop/tcc";
         }
     }
 
-    async function get_especific_lending(id_lending) {
+    async function get_especific_lending(phone_lending) {
       let data_map = new Map();
       
       try {
-        
+            // SOMENTE PENDENTES PODEM REALIZAR RENOVAÇÕES
           const response = await fetch(constUrl+"/listar/pendentes").then(res => res.json())
           
           response.DATA
-          .filter(item => item.id == id_lending)
+          .filter(item => item.aluno_telefone == phone_lending)
               .forEach(item => {
                   data_map.set(item.id, item); 
               });
@@ -45,7 +45,7 @@ const constUrl = "https://marciossupiais.shop/tcc";
           return data_map;
           
       } catch (error) {
-          console.error('Erro ao buscar pelos alunos listados: ', error);
+          console.error('Erro ao buscar pelo empréstimo específico ', error);
           return [];
       }
   }
