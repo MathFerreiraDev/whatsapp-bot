@@ -27,9 +27,15 @@ class UserCommands {
                   // COMANDO DE "/RENOVAR"
                     case 0:
                       if(message.body.toLowerCase() === '/renovar'){
-                        map_result = apiSource.get_especific_lending(phone_number);
+                        const map_result = apiSource.get_especific_lending(phone_number);
                         if(map_result != []){
-                        actionCommands.sendMessage(client, phone_number, "Digite o código de solicitação existente para o livro que deseja renovar", "solicitador");
+
+                          let verifity_request_body;
+                          for (const [key, item] of map_result) {
+                            verifity_request_body += `RONOVACAO${item.id} - ${item.livro_titulo}\n`;
+                          }
+
+                        actionCommands.sendMessage(client, phone_number, `Olá!, vejamos os livros que alugados que você pode renovar...\n Ei! acabei achando essa lista, que tal?\n ${verifity_request_body}\n\n *Caso queira renovar algum desses...basta digitar seu devido código!*`, "solicitador");
                         userStates[phone_number].step++;
                         //userStates[phone_number].request_code = ;
                         }else {
@@ -38,10 +44,11 @@ class UserCommands {
                       }
                       break;
                     case 1:
-                      
+                      if(message.body.toUpperCase().includes("RONOVACAO")){
                       actionCommands.sendMessage(client, phone_number, "Estou sob passo 1", "solicitador");
                       //COLOR VERIFICADOR P AUMENTAR O ESTADO DURANTE CADA AÇÃO
                       userStates[phone_number].step++;
+                      }
                       break;
                     case 2:
                       //userStates[userId].idade = message.body;
