@@ -8,10 +8,10 @@ const constUrl = "https://marciossupiais.shop/tcc";
        
         
      async function get_lendings() {
-        var data_map = new Map();
+        let data_map = new Map();
         
         try {
-            const response = await fetch(constUrl+"/emprestimos/pendentes").then(res => res.json())
+            const response = await fetch(constUrl+"/emprestimos/pendentes").then(res => res.json());
             
             response.DATA
                 //.filter(item => actionCommands.checkIsTodayDataAPI(item,2) || actionCommands.checkIsTodayDataAPI(item,1) || actionCommands.checkIsTodayDataAPI(item,0) || actionCommands.checkIsTodayDataAPI(item,-1)) // Filtrando os itens
@@ -33,7 +33,7 @@ const constUrl = "https://marciossupiais.shop/tcc";
       
       try {
             // SOMENTE PENDENTES PODEM REALIZAR RENOVAÇÕES
-          const response = await fetch(constUrl+"/listar/pendentes").then(res => res.json())
+          const response = await fetch(constUrl+"/listar/pendentes").then(res => res.json());
           
           response.DATA
           .filter(item => item.aluno_telefone == phone_lending)
@@ -53,10 +53,10 @@ const constUrl = "https://marciossupiais.shop/tcc";
 
   // EM TESTE -------------------------------------------------------------------------------
   async function get_coordinators(course_id) {
-    var data_map = new Map();
+    let data_map = new Map();
     
     try {
-        const response = await fetch(constUrl+`/coordenadores/`).then(res => res.json())
+        const response = await fetch(constUrl+`/coordenadores/`).then(res => res.json());
         
         response.DATA
             .filter(item => item.id_curso == course_id) // Filtrando os id's de curso
@@ -73,10 +73,33 @@ const constUrl = "https://marciossupiais.shop/tcc";
     }
 }
 
+async function post_renewal(lending_id, days) {
+    
+    
+    try {
+        const data = { renewal_id: lending_id, renewal_days: days};
+
+
+        
+        await fetch(constUrl+`/emprestimos/estender/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          })
+          .then(response => response.json())
+
+        console.log("Renovação registrada com sucesso!");
+        return true;
+    } catch (error) {
+        console.error('Erro ao buscar pelos cursos listados: ', error);
+        return false;
+    }
+}
   
 
     module.exports = {
         get_lendings,
         get_especific_lending,
-        get_coordinators
+        get_coordinators,
+        post_renewal
       };
