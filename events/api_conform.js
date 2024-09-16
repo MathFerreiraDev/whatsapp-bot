@@ -33,10 +33,10 @@ const constUrl = "https://marciossupiais.shop/tcc";
       
       try {
             // SOMENTE PENDENTES PODEM REALIZAR RENOVAÇÕES
-          const response = await fetch(constUrl+"/listar/pendentes").then(res => res.json());
+          const response = await fetch(constUrl+"/emprestimos/pendentes").then(res => res.json());
           
           response.DATA
-          .filter(item => item.aluno_telefone == phone_lending)
+          .filter(item => item.aluno_telefone == phone_lending && item.renovavel == 1)
               .forEach(item => {
                   data_map.set(item.id, item); 
               });
@@ -77,21 +77,20 @@ async function post_renewal(lending_id, days) {
     
     
     try {
-        const data = { renewal_id: lending_id, renewal_days: days};
-
-
-        
-        await fetch(constUrl+`/emprestimos/estender/`, {
+        const response = await fetch(constUrl + `/emprestimos/estender/`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-          })
-          .then(response => response.json())
-
-        console.log("Renovação registrada com sucesso!");
-        return true;
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer c38a7e02bfca0da201015ce51931b09d462080b7`
+            },
+            body: JSON.stringify({ ID_EMPRESTIMO: lending_id, NOVO_PRAZO: days })
+        });
+        
+        const responseData = await response.json();
+        console.log(response.ok ? "Renovação registrada com sucesso!" : `Erro na resposta da API: ${responseData}`);
+        return response.ok;
     } catch (error) {
-        console.error('Erro ao buscar pelos cursos listados: ', error);
+        console.error('Erro ao enviar a requisição: ', error);
         return false;
     }
 }

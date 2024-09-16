@@ -10,20 +10,75 @@ class UserCommands {
     async reply_options(client) {
 
         
-        client.onMessage(message => {
+        client.onMessage(async message => {
+          console.log("-- NOVA MENSAGEM");
             //FAZER CHECAGEM SE QUEM ENVIOU A MENSAGEM É UM ALUNO
-
+          if(!message.isGroupMsg && message.type === "chat"){
             console.log("-- SINAL RECEPTADO");
             const phone_number = message.from.slice(2, -5);
+            
+
             const get_message = message.body.toLowerCase();
             //VERIFICA SE O NÚMERO POSSUI ALGUM STEP // COLOCAR UM IF SE CASO OCORRER /SETAR, O ESTADO VIRA ZERO ou delete userStates[userId];
             if (!userStates[phone_number]) {
-                userStates[phone_number] = { step: 0, request_map: 0 };
+                userStates[phone_number] = { step: 0};
               }
             
+
+              if(get_message === '/listar') {
+                
+                const map_result = await apiSource.get_especific_lending(phone_number);
+                
+
+                if(map_result.size != 0){
+                  console.log("-- RESULTOU EM TRUE");
+                  let verifity_request_body = "";
+
+                  for (const [key, item] of map_result) {
+                    verifity_request_body += `/RENOVACAO${item.id} - ${item.livro_titulo}\n`;
+                  }
+
+                  console.log("-- A LISTA DE PENDENCIAS FOI MONTADA!");   
+                  actionCommands.sendMessage(client, phone_number, `Olá!, vejamos os livros que alugados que você pode renovar...\n Ei! acabei achando essa lista, que tal?\n ${verifity_request_body}\n\n *Caso queira renovar algum desses...basta digitar seu devido código!*`, "solicitador");
+                }else {
+                  console.log("-- A LISTA DE PENDENCIAS NAO FOI MONTADA!");  
+                  actionCommands.sendMessage(client, phone_number, "Seu número não possui nenhum empéstimo registrado", "solicitador");
+                }
+
+                console.log("Enviado!");
+
+              }else if(get_message.startsWith("/renovacao")) {
+                console.log("-- ACIONOU RENOVACAO");
+                const map_result = await apiSource.get_especific_lending(phone_number);
+                        
+                let lending_id;
+                if(map_result.size != 0){
+                //COLOR VERIFICADOR P AUMENTAR O ESTADO DURANTE CADA AÇÃO
+                if (Array.from(map_result.entries()).some(([key, item]) => key === parseInt(get_message.replace(/\D/g, '')) && (lending_id = key))) {
+                  
+                  if(apiSource.post_renewal(lending_id, 14)){
+                  actionCommands.sendMessage(client, phone_number, `O empréstimo de id ${lending_id} foi renovado por 14 dias!`, "solicitador");
+                  
+                  }else{
+                    actionCommands.sendMessage(client,phone_number, `Ops, hou um erro, que tal tentar mais tarde?`, "solicitador");
+                  }
+
+                }else{
+                  actionCommands.sendMessage(client, phone_number, `Verifique o empréstimo solicitado e tente novamente`, "solicitador");
+                }
+              }else{
+                actionCommands.sendMessage(client, phone_number, "Seu número não possui nenhum empéstimo registrado", "solicitador");
+              }
+              }
+
+              
+
+
+
+
             //if (message.body.toLowerCase() === '/renovar' && !message.isGroupMsg) {
             
-                switch (userStates[phone_number].step) {
+                /*switch (userStates[phone_number].step) {
                   // COMANDO DE "/RENOVAR"
                     case 0:
                       if(get_message === '/renovar'){
@@ -58,9 +113,9 @@ class UserCommands {
                         }
 
 
-                        userStates[phone_number].step = 0;
+                        
                       } else {
-                        actionCommands.sendMessage(client, phone_number, "Estou sob passo 1", "solicitador");
+                        actionCommands.sendMessage(client, phone_number, "Eita, este não é um empréstimo registrado!", "solicitador");
                       }
 
 
@@ -88,7 +143,9 @@ class UserCommands {
               
              
              // this.check_renewal = true;
-           // }
+           // }*/
+
+            }
           });
         
 
