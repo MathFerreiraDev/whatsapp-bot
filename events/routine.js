@@ -25,7 +25,20 @@ class LendingRoutine {
 
   }
 
+  async coordinator_sender(lending_season){
+    let dataMap_students = apiSource.get_especific_student(lending_season.aluno_rm);
+    const studentData = [...(await dataMap_students).values()].find(item => item.rm === lending_season.aluno_rm);
+    const coordinatorsData = await apiSource.get_coordinators(studentData.id_curso);
 
+        setTimeout(() => {
+          for (const [key, coordinator] of coordinatorsData) {
+
+            const alert_body = messagesTypes.coordinatorBodyMessage(lending, studentData, coordinator, lending_final_date, lending_initial_date);
+           
+            actionCommands.sendMessage(client, coordinator.telefone, alert_body, "coordenador");
+          }
+        }, 500);
+  }
 
 
   async message_sender(client) {
@@ -46,7 +59,7 @@ class LendingRoutine {
       //let dataMap_students = apiSource.get_student(lending.aluno_rm);
 
 
-      //const studentData = [...(await dataMap_students).values()].find(item => item.rm === lending.aluno_rm);
+      
 
       //Verificar o período do empréstimo
       const student_phone = lending.aluno_telefone;
@@ -67,40 +80,26 @@ class LendingRoutine {
       }
 
 
-      //  await actionCommands.sendMessage(client, student_phone, message_body, "aluno");
+       await actionCommands.sendMessage(client, student_phone, message_body, "aluno");
 
-      //  await actionCommands.delay(5000);
-
-
-      //    if(parseInt(lending.renovavel) == 1){
-
-      //      message_body = "Parece que a renovação automática para este livro ainda está habilitada, digite */renovar* caso deseje renovar o aluguel de seu livro por mais *7 dias* ";
-      //      await actionCommands.sendMessage(client, student_phone, message_body, "aluno");
-
-      //    }
+       await actionCommands.delay(5000);
 
 
+         if(parseInt(lending.renovavel) == 1){
 
-      //   await actionCommands.delay(5000);
+           message_body = "Parece que a renovação automática para este livro ainda está habilitada, digite */renovar* caso deseje renovar o aluguel de seu livro por mais *7 dias* ";
+           await actionCommands.sendMessage(client, student_phone, message_body, "aluno");
 
+         }
 
       //Adicionar veriricação para mensagem de renovação
 
 
-      /*if (parseInt(lending.renovavel) == 1) { //&& dia atrasado
-        let coordinatorsData = await apiSource.get_coordinators(studentData.id_curso);
+      if (parseInt(lending.renovavel) == 1) { //&& dia atrasado
+        await coordinator_sender(lending);
+      }
 
-        setTimeout(() => {
-          for (const [key, coordinator] of coordinatorsData) {
-
-            const alert_body = messagesTypes.coordinatorBodyMessage(lending, studentData, coordinator, lending_final_date, lending_initial_date);
-           
-            actionCommands.sendMessage(client, coordinator.telefone, alert_body, "coordenador");
-          }
-        }, 1000);
-      }*/
-
-
+      await actionCommands.delay(5000);
 
 
 
@@ -120,24 +119,7 @@ class LendingRoutine {
     }*/
   }
 
-  async coordinator_sender(client) {
-    let dataMap_lendings = await apiSource.get_lendings();
-
-    for (const [key, lending] of dataMap_lendings) {
-      if (parseInt(lending.renovavel) == 1) { //&& dia atrasado
-        let coordinatorsData = await apiSource.get_coordinators(studentData.id_curso);
-
-        setTimeout(() => {
-          for (const [key, coordinator] of coordinatorsData) {
-
-            const alert_body = messagesTypes.coordinatorBodyMessage(lending, studentData, coordinator, lending_final_date, lending_initial_date);
-
-            actionCommands.sendMessage(client, coordinator.telefone, alert_body, "coordenador");
-          }
-        }, 1000);
-      }
-    }
-  }
+  
 
 
 }

@@ -50,6 +50,26 @@ const constUrl = "https://marciossupiais.shop/tcc";
       }
   }
 
+  async function get_especific_student(student_rm) {
+    let data_map = new Map();
+    
+    try {
+          // SOMENTE PENDENTES PODEM REALIZAR RENOVAÇÕES
+        const response = await fetch(constUrl+"/alunos/rm/"+student_rm).then(res => res.json());
+        
+        response.DATA
+            .forEach(item => {
+                data_map.set(item.id, item); 
+            });
+
+
+        return data_map;
+        
+    } catch (error) {
+        console.error('Erro ao buscar pelo empréstimo específico ', error);
+        return [];
+    }
+}
 
   // EM TESTE -------------------------------------------------------------------------------
   async function get_coordinators(course_id) {
@@ -81,9 +101,8 @@ async function post_renewal(lending_id, days) {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer c38a7e02bfca0da201015ce51931b09d462080b7`
             },
-            body: JSON.stringify({ ID_EMPRESTIMO: lending_id, NOVO_PRAZO: days })
+            body: JSON.stringify({authpass: 'c38a7e02bfca0da201015ce51931b09d462080b7', ID_EMPRESTIMO: lending_id, NOVO_PRAZO: days })
         });
         
         const responseData = await response.json();
@@ -99,6 +118,7 @@ async function post_renewal(lending_id, days) {
     module.exports = {
         get_lendings,
         get_especific_lending,
+        get_especific_student,
         get_coordinators,
         post_renewal
       };
