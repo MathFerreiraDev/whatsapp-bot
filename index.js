@@ -1,108 +1,90 @@
 const venom = require('venom-bot');
+
+const cron = require('node-cron');
+const fs = require('fs');
+const stateFile = 'executionState.json';
+let executed = fs.existsSync(stateFile) ? JSON.parse(fs.readFileSync(stateFile)).executed : false;
+
 const UserCommands = require('./events/user_commands');
 const LendingRoutine = require('./events/routine');
 
-//const { parse, addDays, isAfter, isToday, format } = require('date-fns');
+const { parse, addDays, isAfter, isToday, format } = require('date-fns');
 
-const cron = require('node-cron');
 
-venom
-  .create({
-    session: 'bot-whatsapp',
-    multidevice: true,
-    folderNameToken: 'tokens',
-    headless: true,
-    logQR: true,
-    debug: true,
-    disableWelcome: true,
-    updatesLog: false
-  })
-  .then((client) => start(client))
-  .catch((erro) => {
-    console.log('Erro ao iniciar a sessão: ', erro);
-  });
+function initBot(io) {
+  let latestQRCode = '';
+  let currentStatus = 'Initializing...';
 
-  /*async function GetLendings(){
-  //Armazenando todos os dados do .json 
-  fetch('https://marciossupiais.shop/tcc/alunos')
-  .then(res => res.json())
-  .then(({ DATA }) => {
-    /*filteredArray = DATA.filter(a => 
-      isToday(
-        addDays(parse(a.data_aluguel, 'dd-MM-yy', new Date()), Number(a.prazo)-3) //2 dias serão para o aviso antecipado, 1 pelo dia do aluguel que tbm é descontado
-      ) == true);*/
-      //const filteredArray = DATA.filter(a => a.data_aluguel === a.data_aluguel);
-
+  venom.create(
+    'bot-whatsapp',
+      (base64Qr, asciiQR, attempts, urlCode) => {
+        console.log('QR Code recebido', attempts);
+        latestQRCode = `<img src="${base64Qr}" alt="QR Code" class="w-full h-full"/>`;
+        io.emit('qrcode', latestQRCode);
+      },
+      (statusSession, session) => {
+        console.log('Status Session: ', statusSession);
+        currentStatus = statusSession;
+        io.emit('status', currentStatus);
+      },
+    {
+      multidevice: true,
+      folderNameToken: 'tokens',
+      headless: true,
+      logQR: false,
+      debug: true,
+      disableWelcome: true,
+      updatesLog: false,
+      autoClose: 0,
+    })
+    .then((client) => start(client, io))
+    .catch((error) => {
+      console.log('Erro ao iniciar a sessão: ', error);
+      io.emit('status', "#error");
       
-      //return filteredArray;
-  //})
-  //.catch(console.error);
-//}
+      setTimeout(() => { process.exit(1) }, 5000)
+    });
 
-  /*setTimeout(() => {
-    let lending_array = GetLendings() || [];
-    console.log(lending_array);
-  }, 2000);*/
-  
-  
-  
-  // Função para buscar os dados da API e armazenar no Map apenas os itens filtrados
-  
-  
-  // Chama a função para carregar os dados
-  //fetchData();
-  // Supondo que você tenha um item com id 1 e nome "Maria Santos"
-  
-  
-  // Exportando o Map se estiver usando módulos
-  // export { dataMap };
-  
-  
-  /*setTimeout(() => {
-    dataMap.forEach(item => console.log(item));
-  }, 2000);*/
+    return {
+      getLatestQRCode: () => latestQRCode,
+      getCurrentStatus: () => currentStatus
+    };
+}
 
-  
-  //lending_routine.message_sender(client);
-
-  
-  
-  
-
-function start(client) {
-  
+function start(client, io) {
   console.log("API CHAMADA");
-  
 
-  
   const user_commands = new UserCommands();
   const lending_routine = new LendingRoutine();
 
+ /* lending_routine.message_sender(client, io);
+  user_commands.reply_options(client, io);*/
 
-  
+  //const now = moment().tz('America/Sao_Paulo');
+//const runTime = moment().tz('America/Sao_Paulo').set({ hour: 18, minute: 0 });
+
+// Verificar e rodar se já passou das 18h, mas não exatamente 18h
+/*if (now.isAfter(runTime) && now.diff(runTime, 'minutes') !== 0 && now.day() >= 1 && now.day() <= 5) {
   lending_routine.message_sender(client);
-  user_commands.reply_options(client);
-  
-  
-  /*for (let i = 0; i < 20; i++) {
-    client.sendText('557599772720@c.us', `Mensagem de spam!!!`)
-      .then((result) => {
-        console.log('Mensagem enviada com sucesso: ', result);
-      })
-      .catch((erro) => {
-        console.error('Erro ao enviar a mensagem: ', erro);
-      });
-  }*/
-      cron.schedule('0 18 * * 1-5', () => {     //[0]-minutos; [18]-horas da tarde; [*]-durante todo o mês; [*]-todos os meses; [1-5]-segunda a sexta*
-        console.log('-- HORARIO DE VERFICAÇÃO --');
-        //lending_routine.message_sender(client);
-    }, {
-        timezone: "America/Sao_Paulo" // Ajuste o fuso horário conforme necessário!
-    });
-  
-    
+}*/
+
+
+cron.schedule('* 10-23 * * *', () => {
+  if (!executed) {
+    console.log('-- HORARIO DE VERFICAÇÃO --');
+      lending_routine.message_sender(client);
+    executed = true;
+  }
+  if (new Date().getHours() === 0) executed = false;
+  fs.writeFileSync(stateFile, JSON.stringify({ executed }));
+}, {
+  timezone: "America/Sao_Paulo" 
+});
+
 
   
-  user_commands.reply_options(client);
 
+  user_commands.reply_options(client);
 }
+
+module.exports = initBot;

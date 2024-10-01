@@ -7,9 +7,8 @@ class UserCommands {
         var check_renewal = false;
     }
     
-    async reply_options(client) {
-
-        
+    async reply_options(client, io) {   
+      try {     
         client.onMessage(async message => {
           console.log("-- NOVA MENSAGEM");
             //FAZER CHECAGEM SE QUEM ENVIOU A MENSAGEM É UM ALUNO
@@ -26,20 +25,18 @@ class UserCommands {
             
 
               if(get_message === '/listar') {
-                
                 const map_result = await apiSource.get_especific_lending(phone_number);
-                
-
+              
                 if(map_result.size != 0){
                   console.log("-- RESULTOU EM TRUE");
                   let verifity_request_body = "";
 
                   for (const [key, item] of map_result) {
-                    verifity_request_body += `/RENOVACAO${item.id} - ${item.livro_titulo}\n`;
+                    verifity_request_body += `\n[/RENOVACAO${item.id}] - _${item.livro_titulo}_\n*> expira em XX/XX/XXXX! \n-----------------------*`;
                   }
 
                   console.log("-- A LISTA DE PENDENCIAS FOI MONTADA!");   
-                  actionCommands.sendMessage(client, phone_number, `Olá!, vejamos os livros que alugados que você pode renovar...\n Ei! acabei achando essa lista, que tal?\n ${verifity_request_body}\n\n *Caso queira renovar algum desses...basta digitar seu devido código!*`, "solicitador");
+                  actionCommands.sendMessage(client, phone_number, `Olá!, vejamos os livros que alugados que você pode renovar...\n Ei! acabei achando essa lista, que tal? \n${verifity_request_body}\n\n *Caso queira renovar algum desses...basta digitar seu devido código!*`, "solicitador");
                 }else {
                   console.log("-- A LISTA DE PENDENCIAS NAO FOI MONTADA!");  
                   actionCommands.sendMessage(client, phone_number, "Seu número não possui nenhum empéstimo registrado", "solicitador");
@@ -56,7 +53,7 @@ class UserCommands {
                 //COLOR VERIFICADOR P AUMENTAR O ESTADO DURANTE CADA AÇÃO
                 if (Array.from(map_result.entries()).some(([key, item]) => key === parseInt(get_message.replace(/\D/g, '')) && (lending_id = key))) {
                   
-                  if(apiSource.post_renewal(lending_id, 14)){
+                  if(apiSource.post_renewal(lending_id)){
                   actionCommands.sendMessage(client, phone_number, `O empréstimo de id ${lending_id} foi renovado por 14 dias!`, "solicitador");
                   
                   }else{
@@ -71,9 +68,7 @@ class UserCommands {
               }
               }
 
-              
-
-
+              // VER SE AINDA VAI USAR ESSA PARTE BOMBA!
 
 
             //if (message.body.toLowerCase() === '/renovar' && !message.isGroupMsg) {
@@ -147,8 +142,13 @@ class UserCommands {
 
             }
           });
+  
+        } catch (error) {
+          console.error('ERRO AO PROCESSO DE RECEBIMENTO DE MENSAGENS');
+          io.emit('status', "#error");
+        }
+    
         
-
     }
 
 }

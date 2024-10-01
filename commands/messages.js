@@ -12,10 +12,6 @@ function coordinatorBodyMessage(item_lending, item_student, item_coordinator, fi
     "*📚​ É necessária a consulta para com o mesmo e realizar a devolução do livro.*";
 }
 
-
-
-
-
 function messageBodyGenerator(stituation, item_lending, item_student, item_f_date, item_i_date){
     const randomBody = ~~(Math.random() * 4) + 1;
   
@@ -31,11 +27,11 @@ function messageBodyGenerator(stituation, item_lending, item_student, item_f_dat
           break;
           case 2:
             return `*Eai ${item_student.aluno_nome}, tudo beleza?! 😄*​​\n`+
-            `Só te avisar que faltam 2 dias para o aluguel do livro ${item_lending.livro_titulo} acabar!\n\n`+
+            `Só vim te avisar que faltam 2 dias para o aluguel do livro ${item_lending.livro_titulo} acabar!\n\n`+
             `*Você vai ter até o dia ${item_f_date} para fazer a devolução dele, tenha uma boa tarde 😉*`;
           break;
           case 3:
-            return `*Opa ${item_student.aluno_nome}, sou o [NOME DO BOT] e vim te trazer um racadinho 🤖*​​​\n`+
+            return `*Opa ${item_student.aluno_nome}, sou o Zappy Bot e vim te trazer um recadinho 🤖*​​​\n`+
             `O livro ${item_lending.livro_titulo} que você alugou, está próximo de ter seu aluguel expirado, mais precisamente, daqui a 2 dias!\n\n`+
             `*Sua data limite será ${item_f_date}, fique esperto! 🧐​*`;
           break;
