@@ -47,7 +47,7 @@
   <!-- Navbar -->
   <div class="bg-sky-600 py-2">
     <div class="max-w-6xl mx-auto flex justify-start items-center">
-      <img src="https://github.com/MathFerreiraDev/whatsapp-bot/blob/main/logo.png?raw=true" alt="WhatsApp Logo"
+      <img src="https://github.com/MathFerreiraDev/whatsapp-bot/blob/main/src/img/logo.png?raw=true" alt="WhatsApp Logo"
         class="h-8 mr-2">
       <span class="text-white font-semibold text-lg">ZAPPY BOT - INICIALIZADOR</span>
     </div>
@@ -64,7 +64,7 @@
       <!-- Download section -->
       <div class="border border-gray-200 p-4 rounded-lg flex  items-center mb-8 gap-4">
         <div class="flex items-center w-11/12">
-          <img src="https://github.com/MathFerreiraDev/whatsapp-bot/blob/main/logo.png?raw=true" alt="WhatsApp Logo"
+          <img src="https://github.com/MathFerreiraDev/whatsapp-bot/blob/main/src/img/logo.png?raw=true" alt="WhatsApp Logo"
             class="h-32 mr-3 ">
           <div class="w-full">
             <p class="font-semibold text-gray-700">Demorando para inicializar?</p>
@@ -98,7 +98,7 @@
         <!-- QR Code -->
         <div class="max-w-1/3 flex justify-center items-center">
           <div
-            class="border-2 border-gray-300 rounded-lg p-4 w-64 h-64 bg-cover bg-[url('https://github.com/MathFerreiraDev/whatsapp-bot/blob/main/loading.gif?raw=true')]"
+            class="border-2 border-gray-300 rounded-lg p-4 w-64 h-64 bg-cover bg-[url('https://github.com/MathFerreiraDev/whatsapp-bot/blob/main/src/img/loading.gif?raw=true')]"
             id="qrcode">
             <!-- Placeholder image for QR Code -->
 
@@ -204,13 +204,13 @@
         case "successChat":
           status_desc = "<p class='text-green-400 pl-2'>BOT CONECTADO 🤖</p>";
           status_detail = "<p class='text-green-400'>Bot operante e conectado ao Whatsapp Web!</p>";
-          document.getElementById('qrcode').innerHTML = '<img src="https://github.com/MathFerreiraDev/whatsapp-bot/blob/main/validation.png?raw=true" alt="QR Code" class="w-full h-full"/>';
+          document.getElementById('qrcode').innerHTML = '<img src="https://github.com/MathFerreiraDev/whatsapp-bot/blob/main/src/img/validation.png?raw=true" alt="QR Code" class="w-full h-full"/>';
           break;
         //Erro
         case "#error":
           status_desc = "<p class='text-red-400 pl-2'>Erro de sincronização com o Whatsapp Web!</p>";
           status_detail = "<p class='text-red-400'>Reinicie o bot e tente novamente...</p>";
-          document.getElementById('qrcode').innerHTML = '<img src="https://github.com/MathFerreiraDev/whatsapp-bot/blob/main/error_validation.png?raw=true" alt="QR Code" class="w-full h-full"/>';
+          document.getElementById('qrcode').innerHTML = '<img src="https://github.com/MathFerreiraDev/whatsapp-bot/blob/main/src/img/error_validation.png?raw=true" alt="QR Code" class="w-full h-full"/>';
           //setTimeout(() => { window.close() }, 5000)
           break;
         case "noOpenBrowser":

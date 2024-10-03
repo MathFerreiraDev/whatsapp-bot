@@ -76,16 +76,20 @@ class LendingRoutine {
 async function coordinator_sender(client_season, lending_season, date_i, date_f) {
 
   let dataMap_students = apiSource.get_especific_student(lending_season.aluno_rm);
+  if(dataMap_students.size != 0){
   const studentData = [...(await dataMap_students).values()].find(item => item.rm === lending_season.aluno_rm);
   const coordinatorsData = await apiSource.get_coordinators(studentData.id_curso);
 
-  setTimeout(() => {
-    for (const [key, coordinator] of coordinatorsData) {
-      const alert_body = messagesTypes.coordinatorBodyMessage(lending_season, studentData, coordinator, date_f, date_i);
+  if (coordinatorsData.size != 0) {
+    setTimeout(() => {
+      for (const [key, coordinator] of coordinatorsData) {
+        const alert_body = messagesTypes.coordinatorBodyMessage(lending_season, studentData, coordinator, date_f, date_i);
 
-      actionCommands.sendMessage(client_season, coordinator.telefone, alert_body, "coordenador");
-    }
-  }, 500);
+        actionCommands.sendMessage(client_season, coordinator.telefone, alert_body, "coordenador");
+      }
+    }, 500);
+  }
+}
 }
 
 module.exports = LendingRoutine;
