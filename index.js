@@ -37,7 +37,7 @@ function initBot(io) {
       updatesLog: false,
       autoClose: 0,
     })
-    .then((client) => start(client, io))
+    .then((client) => {let ex = fs.existsSync(stateFile) ? JSON.parse(fs.readFileSync(stateFile)).executed : false; start(client, io, ex);})
     .catch((error) => {
       console.log('Erro ao iniciar a sessão: ', error);
       io.emit('status', "#error");
@@ -51,7 +51,7 @@ function initBot(io) {
     };
 }
 
-function start(client, io) {
+function start(client, io, executed) {
   console.log("API CHAMADA");
 
   const user_commands = new UserCommands();
