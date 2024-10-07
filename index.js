@@ -3,7 +3,7 @@ const venom = require('venom-bot');
 const cron = require('node-cron');
 const fs = require('fs');
 const stateFile = 'executionState.json';
-let executed = fs.existsSync(stateFile) ? JSON.parse(fs.readFileSync(stateFile)).executed : false;
+let executed = fs.existsSync(stateFile) ? JSON.parse(fs.readFileSync(stateFile)).executed : true;
 
 const UserCommands = require('./events/user_commands');
 const LendingRoutine = require('./events/routine');

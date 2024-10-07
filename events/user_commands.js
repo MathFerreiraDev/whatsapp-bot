@@ -32,10 +32,12 @@ class UserCommands {
                   let verifity_request_body = "";
 
                   for (const [key, item] of map_result) {
-                    if(item.renovavel == 1){
-                      verifity_request_body += `\n*📖[/RENOVACAO${item.id}]* - _${item.livro_titulo}_\n*> expira em ${actionCommands.addDaysToDate(item.data_aluguel, item.prazo)}!* \n*-----------------------*`;
-                    }else{
+                    if(item.estado == "atrasado"){
+                      verifity_request_body += `\n*📖[ATRASADO]* - _${item.livro_titulo}_\n*> expira em ${actionCommands.addDaysToDate(item.data_aluguel, item.prazo)}!* \n*-----------------------*`;
+                    }else if(item.renovavel == 0){
                       verifity_request_body += `\n*📖[JÁ RENOVADO]* - _${item.livro_titulo}_\n*> expira em ${actionCommands.addDaysToDate(item.data_aluguel, item.prazo)}!* \n*-----------------------*`;
+                    }else{
+                      verifity_request_body += `\n*📖[/RENOVACAO${item.id}]* - _${item.livro_titulo}_\n*> expira em ${actionCommands.addDaysToDate(item.data_aluguel, item.prazo)}!* \n*-----------------------*`;
                     }
                   }
 
