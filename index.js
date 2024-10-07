@@ -69,22 +69,23 @@ function start(client, io, executed) {
 }*/
 
 
-cron.schedule('* 10-23 * * 1-5', () => {
+
+/*cron.schedule('* 10-23 * * 1-5', () => {
   if (!executed) {
     console.log('-- HORARIO DE VERFICAÇÃO --');
-      lending_routine.message_sender(client);
+      lending_routine.message_sender(client, io);
     executed = true;
   }
   if (new Date().getHours() === 0) executed = false;
   fs.writeFileSync(stateFile, JSON.stringify({ executed }));
 }, {
   timezone: "America/Sao_Paulo" 
-});
+});*/
 
+user_commands.reply_options(client, io); 
+ 
 
   
-
-  user_commands.reply_options(client);
 }
 
 module.exports = initBot;

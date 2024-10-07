@@ -40,15 +40,15 @@ class LendingRoutine {
             message_body = messagesTypes.messageBodyGenerator(0, lending, lending, lending_final_date, lending_initial_date);
 
           }
-          //await actionCommands.sendMessage(client, student_phone, message_body, "aluno");
+          await actionCommands.sendMessage(client, student_phone, message_body, "aluno");
 
-          //await actionCommands.delay(5000);
+          await actionCommands.delay(5000);
 
-          //if(parseInt(lending.renovavel) == 1){
+          if(parseInt(lending.renovavel) == 1){
 
-          //message_body = "Parece que a renovação automática para este livro ainda está habilitada, digite */renovar* caso deseje renovar o aluguel de seu livro por mais *7 dias* ";
-          // await actionCommands.sendMessage(client, student_phone, message_body, "aluno");
-          //}
+          message_body = "Parece que a renovação automática para este livro ainda está habilitada, digite */listar* caso deseje ver sua lista de pendências e renovações disponíveis.";
+           await actionCommands.sendMessage(client, student_phone, message_body, "aluno");
+          }
 
           //Adicionar veriricação para mensagem de renovação
 

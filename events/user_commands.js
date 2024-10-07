@@ -32,11 +32,15 @@ class UserCommands {
                   let verifity_request_body = "";
 
                   for (const [key, item] of map_result) {
-                    verifity_request_body += `\n[/RENOVACAO${item.id}] - _${item.livro_titulo}_\n*> expira em XX/XX/XXXX! \n-----------------------*`;
+                    if(item.renovavel == 1){
+                      verifity_request_body += `\n*📖[/RENOVACAO${item.id}]* - _${item.livro_titulo}_\n*> expira em ${actionCommands.addDaysToDate(item.data_aluguel, item.prazo)}!* \n*-----------------------*`;
+                    }else{
+                      verifity_request_body += `\n*📖[JÁ RENOVADO]* - _${item.livro_titulo}_\n*> expira em ${actionCommands.addDaysToDate(item.data_aluguel, item.prazo)}!* \n*-----------------------*`;
+                    }
                   }
 
                   console.log("-- A LISTA DE PENDENCIAS FOI MONTADA!");   
-                  actionCommands.sendMessage(client, phone_number, `Olá!, vejamos os livros que alugados que você pode renovar...\n Ei! acabei achando essa lista, que tal? \n${verifity_request_body}\n\n *Caso queira renovar algum desses...basta digitar seu devido código!*`, "solicitador");
+                  actionCommands.sendMessage(client, phone_number, `Olá! Vejamos os livros que alugados que você pode renovar...\nEi! acabei achando essa lista, que tal? \n${verifity_request_body}\n\n*Caso queira renovar algum desses...basta digitar seu devido código!*`, "solicitador");
                 }else {
                   console.log("-- A LISTA DE PENDENCIAS NAO FOI MONTADA!");  
                   actionCommands.sendMessage(client, phone_number, "Seu número não possui nenhum empéstimo registrado", "solicitador");
@@ -51,7 +55,7 @@ class UserCommands {
                 let lending_id;
                 if(map_result.size != 0){
                 //COLOR VERIFICADOR P AUMENTAR O ESTADO DURANTE CADA AÇÃO
-                if (Array.from(map_result.entries()).some(([key, item]) => key === parseInt(get_message.replace(/\D/g, '')) && (lending_id = key))) {
+                if (Array.from(map_result.entries()).some(([key, item]) => key === parseInt(get_message.replace(/\D/g, '')) && item.renovacao === 1 && (lending_id = key) )) {
                   
                   if(apiSource.post_renewal(lending_id)){
                   actionCommands.sendMessage(client, phone_number, `O empréstimo de id ${lending_id} foi renovado por 14 dias!`, "solicitador");

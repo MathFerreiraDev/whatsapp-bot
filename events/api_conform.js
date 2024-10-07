@@ -29,7 +29,7 @@ const constUrl = "https://marciossupiais.shop/tcc";
           const response = await fetch(constUrl+"/emprestimos/").then(res => res.json());
           
           response.DATA
-          .filter(item => item.aluno_telefone == phone_lending && item.renovavel == 1)
+          .filter(item => item.aluno_telefone == phone_lending)
               .forEach(item => {
                   data_map.set(item.id, item); 
               });
