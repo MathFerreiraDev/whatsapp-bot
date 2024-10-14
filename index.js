@@ -3,7 +3,7 @@ const venom = require('venom-bot');
 const cron = require('node-cron');
 const fs = require('fs');
 const stateFile = 'executionState.json';
-let executed = fs.existsSync(stateFile) ? JSON.parse(fs.readFileSync(stateFile)).executed : true;
+let executed = fs.existsSync(stateFile) ? JSON.parse(fs.readFileSync(stateFile)).executed : false;
 
 const UserCommands = require('./events/user_commands');
 const LendingRoutine = require('./events/routine');
@@ -52,7 +52,7 @@ function initBot(io) {
 }
 
 function start(client, io, executed) {
-  console.log("API CHAMADA");
+  console.log("BOT STARTADO!");
 
   const user_commands = new UserCommands();
   const lending_routine = new LendingRoutine();
@@ -70,7 +70,7 @@ function start(client, io, executed) {
 
 
 
-/*cron.schedule('* 10-23 * * 1-5', () => {
+cron.schedule('* 10-23 * * *', () => {
   if (!executed) {
     console.log('-- HORARIO DE VERFICAÇÃO --');
       lending_routine.message_sender(client, io);
@@ -80,7 +80,7 @@ function start(client, io, executed) {
   fs.writeFileSync(stateFile, JSON.stringify({ executed }));
 }, {
   timezone: "America/Sao_Paulo" 
-});*/
+});
 
 user_commands.reply_options(client, io); 
  
