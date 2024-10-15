@@ -48,10 +48,10 @@ class UserCommands {
               }
 
               console.log("-- A LISTA DE PENDENCIAS FOI MONTADA!");
-              actionCommands.sendMessage(client, phone_number, `Olá! Vejamos os livros que alugados que você pode renovar...\nEi! acabei achando essa lista, que tal? \n${verifity_request_body}\n\n*Caso queira renovar algum desses...basta digitar seu devido código!*`, "solicitador");
+              actionCommands.sendMessage(client, phone_number, `Olá!👋 Vejamos os livros alugados que você pode renovar...\nEi! acabei achando essa lista, que tal? \n${verifity_request_body}\n\n*Caso queira renovar algum desses...basta digitar seu devido código!*`, "solicitador");
             } else {
               console.log("-- A LISTA DE PENDENCIAS NAO FOI MONTADA!");
-              actionCommands.sendMessage(client, phone_number, "Seu número não possui nenhum empéstimo registrado", "solicitador");
+              actionCommands.sendMessage(client, phone_number, "Este número não possui nenhum empéstimo registrado. ❌", "solicitador");
             }
 
             console.log("Enviado!");
@@ -80,10 +80,10 @@ class UserCommands {
 
               } else {
                 console.log(lending_id);
-                actionCommands.sendMessage(client, phone_number, `Verifique o empréstimo solicitado e tente novamente`, "solicitador");
+                actionCommands.sendMessage(client, phone_number, `Verifique o empréstimo solicitado e tente novamente 😖`, "solicitador");
               }
             } else {
-              actionCommands.sendMessage(client, phone_number, "Seu número não possui nenhum empéstimo registrado", "solicitador");
+              actionCommands.sendMessage(client, phone_number, "Seu número não possui nenhum empéstimo registrado. 📋", "solicitador");
             }
           }
 

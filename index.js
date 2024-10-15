@@ -70,7 +70,7 @@ function start(client, io, executed) {
 
 
 
-cron.schedule('* 10-23 * * *', () => {
+cron.schedule('* 10-23 * * 1-5', () => {
   if (!executed) {
     console.log('-- HORARIO DE VERFICAÇÃO --');
       lending_routine.message_sender(client, io);

@@ -2,7 +2,7 @@ function coordinatorBodyMessage(item_lending, item_student, item_coordinator, fi
     return "*-- NOVA CHAMADA DE ATRASO DE LIVRO! 🚨🚨🚨*\n"+
     `*RM:* ${item_student.rm}\n` +
     `*NOME:* ${item_student.nome}\n` +
-    `*SÉRIE:* ${(new Date().getFullYear() - parseInt(item_coordinator.ano))}° Série\n` +
+    `*SÉRIE:* ${(new Date().getFullYear() - parseInt(item_coordinator.ano)) -1}° Série\n` +
     `*CURSO:* ${item_coordinator.curso}\n` +
     "*--------------//--------------*\n"+
     `*LIVRO EM COBRANÇA:* ${item_lending.livro_titulo}\n` +
